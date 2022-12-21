@@ -67,6 +67,7 @@ class ventanaEditar(tk.Tk):
             self.entry_precio.insert(0,self.lista[3])
             self.entry_cantidad.insert(0,self.lista[4])
             self.text_descripcion.insert(1.0,self.lista[5])
+            self.lista_categoria.set(self.lista[6])
             
         
     def editar(self):

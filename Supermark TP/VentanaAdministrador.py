@@ -70,7 +70,7 @@ class VentanaAdministrador(tk.Tk):
         
     def cargar_productos_categorias():
       self.tabla_producto.delete(*self.tabla_producto.get_children())
-      categoria = lista_categoria.get()
+      categoria = self.lista_categoria.get()
       if categoria =='':
         productos=ProductoCarrito.todos_productos()
         i=1
@@ -105,8 +105,8 @@ class VentanaAdministrador(tk.Tk):
     
     label_categoria = ttk.Label(frameproductos, text="Categoria: ")
     label_categoria.grid(row=0, column=6, sticky='E', padx=5, pady=10)
-    lista_categoria = ttk.Combobox(frameproductos, width=20,values=Categoria.retornar_categorias())
-    lista_categoria.grid(row=0, column=7, sticky=tk.W)
+    self.lista_categoria = ttk.Combobox(frameproductos, width=20,values=Categoria.retornar_categorias())
+    self.lista_categoria.grid(row=0, column=7, sticky=tk.W)
     boton_categoria = ttk.Button(frameproductos, text="Mostrar Productos",command=cargar_productos_categorias)
     boton_categoria.grid(row=0, column=8, sticky='W')
     # tabla productos
@@ -150,7 +150,8 @@ class VentanaAdministrador(tk.Tk):
     
     def ventana_editar_productos():
       
-      ventanaEditar(self.lista)
+      #ventanaEditar(self.lista)
+      ventanaEditar(self._obtener_fila())
 
     def categoria():
       ventanaCategoria()
@@ -166,15 +167,34 @@ class VentanaAdministrador(tk.Tk):
     
     boton_categoria=ttk.Button(frameproductos,text="Categorias",command=categoria)
     boton_categoria.grid(row=3,column=7,sticky='W')
+
+  
+
+    boton_refrescar=ttk.Button(frameproductos,text="refrescar",command=self.refrescar)
+    boton_refrescar.grid(row=3,column=8,sticky='W')
     
     self.lista=self.tabla_producto.bind('<Button-1>',self.obtener_fila)
-  
+  def refrescar(self):
+    self.lista_categoria.config(values=Categoria.retornar_categorias())
+
   
   def obtener_fila(self,event):
       a=self.tabla_producto.focus()
       self.lista=self.tabla_producto.item(a)['values']
       print(self.lista)
       return self.lista
+
+  #prueba
+  def _obtener_fila(self):
+      item_id = self.tabla_producto.item(self.tabla_producto.selection())['values'][0]
+      item_nombre = self.tabla_producto.item(self.tabla_producto.selection())['values'][1]
+      item_marca = self.tabla_producto.item(self.tabla_producto.selection())['values'][2]
+      item_precio = self.tabla_producto.item(self.tabla_producto.selection())['values'][3]
+      item_stock = self.tabla_producto.item(self.tabla_producto.selection())['values'][4]
+      item_descripcion = self.tabla_producto.item(self.tabla_producto.selection())['values'][5]
+      item_categoria = self.lista_categoria.get()
+      lista_datos = (item_id,item_nombre,item_marca,item_precio,item_stock,item_descripcion,item_categoria)
+      return lista_datos
   
    
   

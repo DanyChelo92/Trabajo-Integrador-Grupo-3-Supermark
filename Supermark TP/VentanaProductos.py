@@ -84,24 +84,21 @@ class ventanaProducto:
                     item_precio = float(self.tabla_producto.item(self.tabla_producto.selection())['values'][3])
                     #item_total = item_cant * item_precio
                     
-                    #self.carrito.agregar_producto(producto_carrito)
-                    if (self.carrito.cantidad_articulos()+item_cant) <= 30:
-                        posicion = self.carrito.indice_producto(item_cod)
-                        if posicion!=None:
-                            if (self.carrito.productos[posicion].cantidad + item_cant) <= ProductoCarrito.get_producto_stock(item_cod):
-                                self.carrito.productos[posicion].cantidad += item_cant
-                                self.lista_cant.delete(0,"end")
-                            else:
-                                messagebox.showwarning("Productos","El producto ya existe en el carrito, la cantidad asignada supera al stock")
+                    #self.carrito.agregar_producto(producto_carrito)  
+                    posicion = self.carrito.indice_producto(item_cod)
+                    if posicion!=None:
+                        if (self.carrito.productos[posicion].cantidad + item_cant) <= ProductoCarrito.get_producto_stock(item_cod):
+                            self.carrito.productos[posicion].cantidad += item_cant
+                            self.lista_cant.delete(0,"end")
                         else:
-                            if item_cant <= ProductoCarrito.get_producto_stock(item_cod):
-                                producto_carrito = ProductoCarrito(item_nombre,item_marca,item_precio,item_categoria,item_descripcion,item_cant,item_cod)
-                                self.carrito.agregar_producto(producto_carrito)
-                                self.lista_cant.delete(0,"end")
-                            else:
-                                messagebox.showwarning("Productos","Stock insuficiente")
+                            messagebox.showwarning("Productos","El producto ya existe en el carrito, la cantidad asignada supera al stock")
                     else:
-                        messagebox.showwarning("Productos","El limite del carrito es de 30 articulos. ")
+                        if item_cant <= ProductoCarrito.get_producto_stock(item_cod):
+                            producto_carrito = ProductoCarrito(item_nombre,item_marca,item_precio,item_categoria,item_descripcion,item_cant,item_cod)
+                            self.carrito.agregar_producto(producto_carrito)
+                            self.lista_cant.delete(0,"end")
+                        else:
+                            messagebox.showwarning("Productos","Stock insuficiente")      
                 else:
                     if self.lista_cant.get() == '' :
                         messagebox.showinfo("Productos","El campo cantidad no debe estar vacio")

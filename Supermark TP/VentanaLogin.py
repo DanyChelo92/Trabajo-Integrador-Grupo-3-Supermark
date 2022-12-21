@@ -6,6 +6,7 @@ from MiCuenta import Cuenta
 from ConexionBd import Conexion_BD
 from VentanaCuenta import VentanaCuenta
 from VentanaRegistro import VentanaRegistro
+from VentanaAdministrador import VentanaAdministrador
 class Login(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -54,10 +55,15 @@ class Login(tk.Tk):
         #messagebox.showinfo("Datos Login", "Usuario: " + self.input_usuario.get() + ", Password: " + self.input_pass.get())
         usuario = Usuario.get_usuario(self.input_usuario.get())
         if usuario!=None and usuario.get_clave() == self.input_pass.get() :
-            messagebox.showinfo("Login",f"Binvenido Usuario {usuario.get_correo()}")
-            self.destroy()
-            mi_cuenta = Cuenta(usuario)
-            ventana_cliente = VentanaCuenta(mi_cuenta)
+            if usuario.get_tipo() == 'C':
+                messagebox.showinfo("Login",f"Binvenido Usuario {usuario.get_correo()}")
+                self.destroy()
+                mi_cuenta = Cuenta(usuario)
+                ventana_cliente = VentanaCuenta(mi_cuenta)
+            elif usuario.get_tipo() == 'A':
+                messagebox.showinfo("Login",f"Binvenido Administrador {usuario.get_correo()}")
+                self.destroy()
+                ventana_admin = VentanaAdministrador()
         else:
             messagebox.showwarning("Login","Contraseña o usuario incorrecto")
         return usuario

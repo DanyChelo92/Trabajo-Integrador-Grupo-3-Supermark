@@ -22,12 +22,7 @@ class VentanaRegistro(tk.Tk):
         self.geometry(self.alignstr)
         self.resizable(width=False, height=False)
 
-        self.nombre=tk.StringVar()
-        self.apellido=tk.StringVar()
-        self.domicilio=tk.StringVar()
-        self.dni=tk.StringVar()
-        self.correo=tk.StringVar()
-        self.clave=tk.StringVar()
+        
         self.crear_componentes()
         self.mainloop()
         
@@ -53,22 +48,22 @@ class VentanaRegistro(tk.Tk):
         self.label_clave=tk.Label(self,font=ft,fg="#333333",justify="center",text="Clave: ")
         self.label_clave.place(x=20,y=270,width=70,height=25)
 
-        self.entry_nombre=tk.Entry(self, textvariable=self.nombre,bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
+        self.entry_nombre=tk.Entry(self, text = "",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
         self.entry_nombre.place(x=110,y=20,width=251,height=30)
 
-        self.entry_apellido=tk.Entry(self, textvariable=self.apellido,bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
+        self.entry_apellido=tk.Entry(self, text="",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
         self.entry_apellido.place(x=110,y=70,width=251,height=30)
 
-        self.entry_dni=tk.Entry(self, textvariable=self.dni,bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
+        self.entry_dni=tk.Entry(self, text="",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
         self.entry_dni.place(x=110,y=120,width=251,height=30)
 
-        self.entry_domicilio=tk.Entry(self, textvariable=self.domicilio,bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
+        self.entry_domicilio=tk.Entry(self, text="",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
         self.entry_domicilio.place(x=110,y=170,width=251,height=30)
 
-        self.entry_correo=tk.Entry(self, textvariable=self.correo,bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
+        self.entry_correo=tk.Entry(self, text="",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
         self.entry_correo.place(x=110,y=220,width=251,height=30)
 
-        self.entry_clave=tk.Entry(self, textvariable=self.clave,show="*",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
+        self.entry_clave=tk.Entry(self, text="",show="*",bg="#ffffff",borderwidth="1px",font=ft,fg="#333333",justify="center")
         self.entry_clave.place(x=110,y=270,width=251,height=30)
     
         self.button_registrase=tk.Button(self,bg="#f0f0f0",font=ft,fg="#000000",justify="center",text="Registrarse",command=self._registrar_usuario)
@@ -77,25 +72,35 @@ class VentanaRegistro(tk.Tk):
 
     def _registrar_usuario(self):
         if self.validar_entrys():
-            if Usuario.existe_usuario(self.correo.get())!=True:
+            nombre=self.entry_nombre.get()
+            apellido=self.entry_apellido.get()
+            domicilio=self.entry_domicilio.get()
+            dni=self.entry_dni.get()
+            correo=self.entry_correo.get()
+            clave=self.entry_clave.get()
+            if Usuario.existe_usuario(correo)!=True:   
+                nuevo_usuario = Usuario(correo,clave,"C")
+                nuevo_cliente = Cliente(nombre,apellido,domicilio,correo,dni)
+                nuevo_usuario.insertar()
+                nuevo_cliente.insert_cliente()
+                messagebox.showinfo("Registro de Usuario","Registro Exitoso! Inicie Sesion.")
+                self.destroy()
                 
-                    nuevo_usuario = Usuario(self.correo.get(),self.clave.get(),"C")
-                    nuevo_cliente = Cliente(self.nombre.get(),self.apellido.get(),self.domicilio.get(),self.correo.get(),self.dni.get())
-                    nuevo_usuario.insertar()
-                    nuevo_cliente.insert_cliente()
-                    messagebox.showinfo("Registro de Usuario","Registro Exitoso! Inicie Sesion.")
-                    self.destroy()
-                
-                    #messagebox.showerror("Registro de Usuario","Ha ocurrido un error no se pudo regitrar al usuario")
-                    #print()
-
+                #messagebox.showerror("Registro de Usuario","Ha ocurrido un error no se pudo regitrar al usuario")
+                #print()
             else:
-                messagebox.showerror("Registro de Usuario",f"El usuario {self.correo.get()} ya existe")
+                messagebox.showerror("Registro de Usuario",f"El usuario {correo} ya existe")
         else:
             messagebox.showwarning("Registro de Usuario","Los campos no deben estar vacios")
     
     def validar_entrys(self):
-        if self.nombre.get()!="" and self.apellido.get()!="" and self.domicilio.get()!="" and self.correo.get()!="" and self.dni.get()!="":
+        nombre=self.entry_nombre.get()
+        apellido=self.entry_apellido.get()
+        domicilio=self.entry_domicilio.get()
+        dni=self.entry_dni.get()
+        correo=self.entry_correo.get()
+        clave=self.entry_clave.get()
+        if nombre!="" and apellido!="" and domicilio!="" and correo!="" and dni!="" and clave!="":
             return True
         else:
             return False

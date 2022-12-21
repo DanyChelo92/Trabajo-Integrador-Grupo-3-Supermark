@@ -59,10 +59,11 @@ class Cuenta:
     def get_cliente_compras(self):
         compras = []
         cliente = self.get_cliente()
-        conn = Conexion_BD("Supermark.db")
-        consulta_compras=conn.consulta(f"SELECT * FROM venta WHERE id_cliente='{cliente.get_id()}';")
-        if consulta_compras!=[]:
-            compras = consulta_compras
+        if cliente != None:
+            conn = Conexion_BD("Supermark.db")
+            consulta_compras=conn.consulta(f"SELECT * FROM venta WHERE id_cliente='{cliente.get_id()}';")
+            if consulta_compras!=[]:
+                compras = consulta_compras
         return compras
 
     #retorna una lista de carritos las compras que hizo el usuario
@@ -107,7 +108,8 @@ class Cuenta:
   
 
 if __name__ == '__main__' :
-    mi_usuario = Usuario("fernando_compras@gmail.com","147fer","C")
+    mi_usuario = Usuario("juan@","1234","C")
+    print(mi_usuario)
     mi_cuenta = Cuenta(mi_usuario)
     print(mi_cuenta.get_cliente())
     print(mi_cuenta.get_cliente_compras())

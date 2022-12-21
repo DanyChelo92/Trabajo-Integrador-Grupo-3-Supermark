@@ -33,6 +33,10 @@ class VentanaCarrito:
         self.entry_cant.grid(row=2,column=2,sticky="W")
         self.boton_confirmar = ttk.Button(self._root,text="Confirmar",command=self.confirmar_modificacion,state="disabled")
         self.boton_confirmar.grid(row=2,column=3,padx=10,sticky="W")
+
+        self.boton_cancelar = ttk.Button(self._root,text="Cancelar",command=self.llenar_tabla_carrito,state="disabled")
+        self.boton_cancelar.grid(row=2,column=4,padx=10,sticky="W")
+
         self.label_total = ttk.Label(self._root,text="Total a pagar: ")
         self.label_total.grid(row=4,column=0,sticky="E")
         self.entry_total = ttk.Entry(self._root,text = "", width=10,state="readonly")
@@ -142,7 +146,7 @@ class VentanaCarrito:
     def modificar_producto(self):
         self.entry_cant.config(state="normal")
         self.boton_confirmar.config(state="enabled")
-        
+        self.boton_cancelar.config(state="enabled")
     
     def confirmar_modificacion(self):
         self.entry_codigo.config(state="normal")
@@ -172,10 +176,13 @@ class VentanaCarrito:
     def confirmar_compra(self):
         comprobante = self.lista_comprobante.get()
         if comprobante != "":
-            self.cuenta.ejecutar_compra(comprobante)
-            messagebox.showinfo("Carrito","Compra exitosa, Gracias por elegirnos!!!")
-            self.llenar_tabla_carrito()
-            self.lista_comprobante.set("")
+            if self.cuenta.carrito.cantidad_articulos() <= 30:
+                self.cuenta.ejecutar_compra(comprobante)
+                messagebox.showinfo("Carrito","Compra exitosa, Gracias por elegirnos!!!")
+                self.llenar_tabla_carrito()
+                self.lista_comprobante.set("")
+            else:
+                messagebox.showwarning("Carrito","El limite del carrito es de 30 articulos.")
         else:
             messagebox.showwarning("Carrito","Selecciona el tipo de comprobante")
 
@@ -183,6 +190,7 @@ class VentanaCarrito:
         self.boton_confirmar.config(state="disabled")
         self.boton_eliminar.config(state="disabled")
         self.boton_modificar.config(state="disabled")
+        self.boton_cancelar.config(state="disabled")
 
         self.entry_codigo.config(state="normal")
         self.entry_codigo.delete(0,"end")
@@ -195,8 +203,3 @@ class VentanaCarrito:
         self.entry_cant.config(state="normal")
         self.entry_cant.delete(0,"end")
         self.entry_cant.config(state="readonly")
-
-if __name__ == '__main__':
-    root = tk.Frame()
-    carrito=VentanaCarrito(root)
-    root.mainloop()

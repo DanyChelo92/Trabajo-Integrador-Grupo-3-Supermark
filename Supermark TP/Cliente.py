@@ -35,6 +35,11 @@ class Cliente:
     def insert_cliente(self):
         conn = Conexion_BD("Supermark.db")
         conn.insertar(F"INSERT INTO cliente (nombre,apellido,dni,domicilio,correo) VALUES('{self.get_nombre()}','{self.get_apellido()}',{self.get_dni()},'{self.get_domicilio()}','{self.get_correo()}')")
+    
+    def actualizar_cliente(self):
+        conn = Conexion_BD("Supermark.db")
+        conn.actualizar(f"UPDATE cliente SET nombre = '{self.get_nombre()}', apellido = '{self.get_apellido()}', dni = '{self.get_dni()}', domicilio = '{self.get_domicilio()}' WHERE id = {self.get_id()};")
+    
     @staticmethod
     def datos_cliente():
         conn=Conexion_BD('Supermark.db')
